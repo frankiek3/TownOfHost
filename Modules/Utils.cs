@@ -825,7 +825,7 @@ namespace TownOfHost
                 if (executioner == null) continue;
                 if (targetId == ExecutionerTarget.Value && !executioner.Data.IsDead)
                 {
-                    executioner.RpcSetCustomRole(Options.CRoleExecutionerChangeRoles[Options.ExecutionerChangeRolesAfterTargetKilled.GetSelection()]); //対象がキルされたらオプションで設定した役職にする
+                    executioner.RpcSetCustomRole(Options.CRoleExecutionerChangeRoles[Options.ExecutionerChangeRolesAfterTargetKilled.GetSelection()]); //オプションで設定した役職にする
                     RemoveExecutionerKey.Add(ExecutionerTarget.Key);
                 }
             }
@@ -833,6 +833,7 @@ namespace TownOfHost
             {
                 Main.ExecutionerTarget.Remove(RemoveKey);
                 RPC.RemoveExecutionerKey(RemoveKey);
+                NotifyRoles();
             }
         }
     }
