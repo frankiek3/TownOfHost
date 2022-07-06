@@ -547,47 +547,45 @@ namespace TownOfHost
                 //他人用の変数定義
                 bool SeerKnowsImpostors = false; //trueの時、インポスターの名前が赤色に見える
 
-                if (seer.Is(CustomRoles.BountyHunter))
+                switch (seer.GetCustomRole())
                 {
-                    if (seer.GetBountyTarget() != null)
-                    {
-                        string BountyTargetName = seer.GetBountyTarget().GetRealName(isMeeting);
-                        SelfSuffix = $"<size={fontSize}>Target:{BountyTargetName}</size>";
-                    }
-                }
-                else if (seer.Is(CustomRoles.FireWorks))
-                {
-                    string stateText = FireWorks.GetStateText(seer);
-                    SelfSuffix = $"{stateText}";
-                }
-                else if (seer.Is(CustomRoles.Witch))
-                {
-                    SelfSuffix = seer.IsSpellMode() ? "Mode:" + GetString("WitchModeSpell") : "Mode:" + GetString("WitchModeKill");
-                }
-                //タスクを終えたSnitchがインポスター/キル可能な第三陣営の方角を確認できる
-                else if (seer.Is(CustomRoles.Snitch))
-                {
-                    var TaskState = seer.GetPlayerTaskState();
-                    if (TaskState.IsTaskFinished)
-                    {
-                        SeerKnowsImpostors = true;
-                        //ミーティング以外では矢印表示
-                        if (!isMeeting)
+                    case CustomRoles.BountyHunter:
+                        if (seer.GetBountyTarget() != null)
                         {
-                            foreach (var arrow in Main.targetArrows)
+                            string BountyTargetName = seer.GetBountyTarget().GetRealName(isMeeting);
+                            SelfSuffix = $"<size={fontSize}>Target:{BountyTargetName}</size>";
+                        }
+                        break;
+                    case CustomRoles.FireWorks:
+                        string stateText = FireWorks.GetStateText(seer);
+                        SelfSuffix = $"{stateText}";
+                        break;
+                    case CustomRoles.Witch:
+                        SelfSuffix = seer.IsSpellMode() ? "Mode:" + GetString("WitchModeSpell") : "Mode:" + GetString("WitchModeKill");
+                        break;
+                    //タスクを終えたSnitchがインポスター/キル可能な第三陣営の方角を確認できる
+                    case CustomRoles.Snitch:
+                        var TaskState = seer.GetPlayerTaskState();
+                        if (TaskState.IsTaskFinished)
+                        {
+                            SeerKnowsImpostors = true;
+                            //ミーティング以外では矢印表示
+                            if (!isMeeting)
                             {
-                                //自分用の矢印で対象が死んでない時
-                                if (arrow.Key.Item1 == seer.PlayerId && !PlayerState.isDead[arrow.Key.Item2])
-                                    SelfSuffix += arrow.Value;
+                                foreach (var arrow in Main.targetArrows)
+                                {
+                                    //自分用の矢印で対象が死んでない時
+                                    if (arrow.Key.Item1 == seer.PlayerId && !PlayerState.isDead[arrow.Key.Item2])
+                                        SelfSuffix += arrow.Value;
+                                }
                             }
                         }
-                    }
-                }
-                else if (seer.Is(CustomRoles.MadSnitch))
-                {
-                    var TaskState = seer.GetPlayerTaskState();
-                    if (TaskState.IsTaskFinished)
-                        SeerKnowsImpostors = true;
+                        break;
+                    case CustomRoles.MadSnitch:
+                        var TaskState = seer.GetPlayerTaskState();
+                        if (TaskState.IsTaskFinished)
+                            SeerKnowsImpostors = true;
+                        break;
                 }
 
                 //RealNameを取得 なければ現在の名前をRealNamesに書き込む
