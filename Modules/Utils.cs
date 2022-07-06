@@ -652,6 +652,7 @@ namespace TownOfHost
 
                         if (seer.Data.IsDead)
                         {
+                            //霊界からラバーズ視認
                             if (target.Is(CustomRoles.Lovers))
                             {
                                 TargetMark += $"<color={GetRoleColorCode(CustomRoles.Lovers)}>♡</color>";
@@ -666,8 +667,7 @@ namespace TownOfHost
                         else
                         {
 
-                            //ハートマークを付ける(相手に) && 霊界からラバーズ視認
-                            // Lovers and ghosts can see lovers heart marks
+                            //ハートマークを付ける(相手に)
                             if (seer.Is(CustomRoles.Lovers) && target.Is(CustomRoles.Lovers))
                             {
                                 TargetMark += $"<color={GetRoleColorCode(CustomRoles.Lovers)}>♡</color>";
