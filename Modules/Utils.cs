@@ -177,7 +177,6 @@ namespace TownOfHost
                     if (cSubRole == CustomRoles.Lovers)
                     {
                         //ラバーズがクルー陣営の場合タスクを付与しない
-                        // A Crew task win does not require Lovers tasks
                         if (cRole.GetRoleType() == RoleType.Crewmate)
                         {
                             hasTasks = false;
