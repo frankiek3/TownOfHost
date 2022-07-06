@@ -680,37 +680,36 @@ namespace TownOfHost
                                 }
                             }
 
-                            if (seer.Is(CustomRoles.Arsonist)) //seerがアーソニストの時
+                            switch (seer.GetCustomRole())
                             {
-                                if (seer.IsDousedPlayer(target)) //seerがtargetに既にオイルを塗っている(完了)
-                                {
-                                    TargetMark += $"<color={GetRoleColorCode(CustomRoles.Arsonist)}>▲</color>";
-                                }
-                                else if (Main.ArsonistTimer.TryGetValue(seer.PlayerId, out var ar_kvp) && //seerがオイルを塗っている途中(現在進行)
-                                  ar_kvp.Item1 == target) //オイルを塗っている対象がtarget
-                                {
-                                    TargetMark += $"<color={GetRoleColorCode(CustomRoles.Arsonist)}>△</color>";
-                                }
-                            }
-                            else if (seer.Is(CustomRoles.Puppeteer))
-                            {
-                                if (Main.PuppeteerList.ContainsValue(seer.PlayerId) &&
-                                  Main.PuppeteerList.ContainsKey(target.PlayerId))
-                                    TargetMark += $"<color={Utils.GetRoleColorCode(CustomRoles.Impostor)}>◆</color>";
-                            }
-                            else if (seer.Is(CustomRoles.Doctor)) //seerがDoctor
-                            {
-                                if (target.Data.IsDead) //変更対象が死人
-                                    TargetDeathReason = $"({Helpers.ColorString(GetRoleColor(CustomRoles.Doctor), GetVitalText(target.PlayerId))})";
-                            }
-                            else if (seer.Is(CustomRoles.Executioner)) //seerがExecutioner or Dead
-                            {
-                                foreach (var ExecutionerTarget in Main.ExecutionerTarget)
-                                {
-                                    if (seer.PlayerId == ExecutionerTarget.Key && //seerがExecutioner
-                                      target.PlayerId == ExecutionerTarget.Value) //targetがValue
-                                        TargetMark += $"<color={Utils.GetRoleColorCode(CustomRoles.Executioner)}>♦</color>";
-                                }
+                                case CustomRoles.Arsonist: //seerがアーソニストの時
+                                    if (seer.IsDousedPlayer(target)) //seerがtargetに既にオイルを塗っている(完了)
+                                    {
+                                        TargetMark += $"<color={GetRoleColorCode(CustomRoles.Arsonist)}>▲</color>";
+                                    }
+                                    else if (Main.ArsonistTimer.TryGetValue(seer.PlayerId, out var ar_kvp) && //seerがオイルを塗っている途中(現在進行)
+                                      ar_kvp.Item1 == target) //オイルを塗っている対象がtarget
+                                    {
+                                        TargetMark += $"<color={GetRoleColorCode(CustomRoles.Arsonist)}>△</color>";
+                                    }
+                                    break;
+                                case CustomRoles.Puppeteer:
+                                    if (Main.PuppeteerList.ContainsValue(seer.PlayerId) &&
+                                      Main.PuppeteerList.ContainsKey(target.PlayerId))
+                                        TargetMark += $"<color={Utils.GetRoleColorCode(CustomRoles.Impostor)}>◆</color>";
+                                    break;
+                                case CustomRoles.Doctor: //seerがDoctor
+                                    if (target.Data.IsDead) //変更対象が死人
+                                        TargetDeathReason = $"({Helpers.ColorString(GetRoleColor(CustomRoles.Doctor), GetVitalText(target.PlayerId))})";
+                                    break;
+                                case CustomRoles.Executioner: //seerがExecutioner or Dead
+                                    foreach (var ExecutionerTarget in Main.ExecutionerTarget)
+                                    {
+                                        if (seer.PlayerId == ExecutionerTarget.Key && //seerがExecutioner
+                                          target.PlayerId == ExecutionerTarget.Value) //targetがValue
+                                            TargetMark += $"<color={Utils.GetRoleColorCode(CustomRoles.Executioner)}>♦</color>";
+                                    }
+                                    break;
                             }
                         }
 
